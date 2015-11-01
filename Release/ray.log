@@ -1,0 +1,36 @@
+﻿Build started 11/2/2015 2:14:09 AM.
+     1>Project "C:\Users\faifa\Downloads\RaySkelF14\ray.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Ilocal\include /Zi /nologo /W3 /WX- /O2 /Ob2 /Oy- /D NDEBUG /D _WINDOWS /D WIN32 /D SAMPLE_SOLUTION /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Release/" /Fd".\Release/vc120.pdb" /Gd /TP /analyze- /errorReport:prompt src\RayTracer.cpp
+         RayTracer.cpp
+     1>c:\users\faifa\downloads\rayskelf14\src\fileio/parse.h(180): warning C4018: '<' : signed/unsigned mismatch
+     1>src\RayTracer.cpp(61): warning C4244: 'initializing' : conversion from 'const double' to 'float', possible loss of data
+     1>src\RayTracer.cpp(62): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Release/ray.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:local\lib fltkd.lib wsock32.lib opengl32.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcmt /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\Release\ray.pdb" /MAP:".\Release/ray.map" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Release\ray.lib" /MACHINE:X86 /SAFESEH:NO .\Release/getopt.obj
+         .\Release/main.obj
+         .\Release/RayTracer.obj
+         .\Release/TraceGLWindow.obj
+         .\Release/TraceUI.obj
+         .\Release/bitmap.obj
+         .\Release/parse.obj
+         .\Release/read.obj
+         .\Release/vecmath.obj
+         .\Release/camera.obj
+         .\Release/light.obj
+         .\Release/material.obj
+         .\Release/ray.obj
+         .\Release/scene.obj
+         .\Release/Box.obj
+         .\Release/Cone.obj
+         .\Release/Cylinder.obj
+         .\Release/Sphere.obj
+         .\Release/Square.obj
+         .\Release/trimesh.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+         ray.vcxproj -> C:\Users\faifa\Downloads\RaySkelF14\.\Release\ray.exe
+     1>Done Building Project "C:\Users\faifa\Downloads\RaySkelF14\ray.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.99

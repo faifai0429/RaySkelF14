@@ -1,0 +1,107 @@
+﻿Build started 11/1/2015 6:04:30 PM.
+     1>Project "C:\Users\faifa\Downloads\RaySkelF14\ray.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Ilocal\include /ZI /nologo /W3 /WX- /Od /Oy- /D _DEBUG /D WIN32 /D _WINDOWS /D SAMPLE_SOLUTION /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Debug/" /Fd".\Debug/vc120.pdb" /Gd /TP /analyze- /errorReport:prompt src\RayTracer.cpp src\SceneObjects\Box.cpp src\SceneObjects\Cone.cpp src\SceneObjects\Cylinder.cpp src\SceneObjects\Sphere.cpp src\SceneObjects\Square.cpp src\SceneObjects\trimesh.cpp src\fileio\read.cpp src\main.cpp src\scene\camera.cpp src\scene\light.cpp src\scene\material.cpp src\scene\ray.cpp src\scene\scene.cpp src\ui\TraceGLWindow.cpp src\ui\TraceUI.cpp
+         RayTracer.cpp
+     1>c:\users\faifa\downloads\rayskelf14\src\fileio\parse.h(180): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\faifa\downloads\rayskelf14\src\raytracer.cpp(61): warning C4244: 'initializing' : conversion from 'const double' to 'float', possible loss of data
+     1>c:\users\faifa\downloads\rayskelf14\src\raytracer.cpp(62): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         Box.cpp
+         Cone.cpp
+         Cylinder.cpp
+         Sphere.cpp
+         Square.cpp
+         trimesh.cpp
+     1>c:\users\faifa\downloads\rayskelf14\src\sceneobjects\trimesh.cpp(91): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\faifa\downloads\rayskelf14\src\sceneobjects\trimesh.cpp(102): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         read.cpp
+     1>c:\users\faifa\downloads\rayskelf14\src\fileio\parse.h(180): warning C4018: '<' : signed/unsigned mismatch
+         main.cpp
+         camera.cpp
+         light.cpp
+         material.cpp
+         ray.cpp
+         scene.cpp
+         TraceGLWindow.cpp
+         TraceUI.cpp
+     1>c:\users\faifa\downloads\rayskelf14\src\ui\traceui.cpp(34): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : see declaration of 'sprintf'
+     1>c:\users\faifa\downloads\rayskelf14\src\ui\traceui.cpp(37): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : see declaration of 'sprintf'
+     1>c:\users\faifa\downloads\rayskelf14\src\ui\traceui.cpp(160): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(356) : see declaration of 'sprintf'
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug/ray.exe" /INCREMENTAL /NOLOGO /LIBPATH:local\lib local/lib/fltkd.lib wsock32.lib opengl32.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcmtd /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Debug/ray.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug\ray.lib" /MACHINE:X86 /SAFESEH .\Debug/getopt.obj
+         .\Debug/main.obj
+         .\Debug/RayTracer.obj
+         .\Debug/TraceGLWindow.obj
+         .\Debug/TraceUI.obj
+         .\Debug/bitmap.obj
+         .\Debug/parse.obj
+         .\Debug/read.obj
+         .\Debug/vecmath.obj
+         .\Debug/camera.obj
+         .\Debug/light.obj
+         .\Debug/material.obj
+         .\Debug/ray.obj
+         .\Debug/scene.obj
+         .\Debug/Box.obj
+         .\Debug/Cone.obj
+         .\Debug/Cylinder.obj
+         .\Debug/Sphere.obj
+         .\Debug/Square.obj
+         .\Debug/trimesh.obj
+     1>getopt.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+     1>fltkd.lib(Fl_visual.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_ask.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Window.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Gl_Window.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Widget.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Menu_.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Menu_Bar.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Valuator.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Value_Slider.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Button.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_file_chooser.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Group.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_x.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_compose.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_rect.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Window_hotspot.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(vsnprintf.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Input.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Input_.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Box.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_shortcut.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Return_Button.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Gl_Choice.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_abort.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_color.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Menu.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_boxtype.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Slider.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_draw.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_font.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_labeltype.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(filename_isdir.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(filename_match.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Browser_.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(filename_list.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(filename_expand.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(filename_absolute.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_cutpaste.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Menu_Window.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Single_Window.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_grab.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(Fl_Scrollbar.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(scandir.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(numericsort.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>fltkd.lib(fl_call_main.obj) : error LNK2026: module unsafe for SAFESEH image.
+     1>.\Debug/ray.exe : fatal error LNK1281: Unable to generate SAFESEH image.
+     1>Done Building Project "C:\Users\faifa\Downloads\RaySkelF14\ray.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:09.05
