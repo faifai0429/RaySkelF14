@@ -29,7 +29,7 @@ vec3f Material::shade( Scene *scene, const ray& r, const isect& i ) const
 		intensity = (*light)->getColor(isect_pos);
 		atten = (*light)->distanceAttenuation(isect_pos) * (*light)->shadowAttenuation(isect_pos);
 		diffuse = kd.cross(intensity * i.N.dot((*light)->getDirection(isect_pos)));
-		specular = ks.cross(intensity * pow(refl_dir.dot(-u), shininess));
+		specular = ks.cross(intensity * pow(refl_dir.dot(-u), shininess * 128));
 		color = color + atten.cross(diffuse + specular);
 	}
 

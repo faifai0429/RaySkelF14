@@ -13,7 +13,16 @@ vec3f DirectionalLight::shadowAttenuation( const vec3f& P ) const
 {
     // YOUR CODE HERE:
     // You should implement shadow-handling code here.
-    return vec3f(1,1,1);
+
+	const double EPS = std::numeric_limits<double>::epsilon();
+	ray r(P + getDirection(P) * EPS, -getDirection(P));
+	isect i;
+
+	if (scene->intersect(r, i)) {	
+		return vec3f(1.0, 1.0, 1.0);
+	}
+
+	return vec3f(0.0, 0.0, 0.0);
 }
 
 vec3f DirectionalLight::getColor( const vec3f& P ) const
@@ -62,12 +71,12 @@ vec3f PointLight::shadowAttenuation(const vec3f& P) const
     // You should implement shadow-handling code here.
 	
 	const double EPS = std::numeric_limits<double>::epsilon();
-	ray r(P + getDirection(P) * EPS, getDirection(P));			//push the isect point outward a bit
+	ray r(P + getDirection(P) * EPS, -getDirection(P));			//push the isect point outward a bit
 	isect i;
 
 	if (scene->intersect(r, i)) {
 		const double light_t = (position - P).length();
-		if (i.t < light_t) {
+		if (i.t < light_t) {					//intersection before light source
 			return vec3f(0.0, 0.0, 0.0);
 		}
 		else {
