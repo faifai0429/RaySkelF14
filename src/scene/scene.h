@@ -18,6 +18,7 @@ using namespace std;
 #include "../vecmath/vecmath.h"
 
 class Light;
+class AmbientLight;
 class Scene;
 
 class SceneElement
@@ -261,12 +262,20 @@ public:
 	}
 	void add( Light* light )
 	{ lights.push_back( light ); }
+	void add(AmbientLight* ambientLight)
+	{
+		ambientLights.push_back(ambientLight);
+	}
 
 	bool intersect( const ray& r, isect& i ) const;
 	void initScene();
 
-	list<Light*>::const_iterator beginLights() const { return lights.begin(); }
-	list<Light*>::const_iterator endLights() const { return lights.end(); }
+	list<Light*>* getLights() {
+		return &lights;
+	}
+	list<AmbientLight*>* getAmbientLights() {
+		return &ambientLights;
+	}
         
 	Camera *getCamera() { return &camera; }
 
@@ -277,6 +286,7 @@ private:
 	list<Geometry*> nonboundedobjects;
 	list<Geometry*> boundedobjects;
     list<Light*> lights;
+	list<AmbientLight*> ambientLights;
     Camera camera;
 	
 	// Each object in the scene, provided that it has hasBoundingBoxCapability(),

@@ -49,4 +49,16 @@ protected:
 	vec3f position;
 };
 
+class AmbientLight
+{
+public:
+	AmbientLight(const vec3f& color)
+		: color(color) {}
+	vec3f getColor() const;
+
+private:
+	vec3f color;
+
+};
+
 #endif // __LIGHT_H__

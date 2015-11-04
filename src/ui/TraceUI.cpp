@@ -13,6 +13,22 @@
 #include "../RayTracer.h"
 
 static bool done;
+TraceUI* TraceUI::m_pInstance = nullptr;
+
+TraceUI* TraceUI::getInstance() {
+	if (!m_pInstance) {
+		m_pInstance = new TraceUI();
+	}
+
+	return m_pInstance;
+}
+
+void TraceUI::destruct() {
+	if (m_pInstance) {
+		delete m_pInstance;
+		m_pInstance = nullptr;
+	}
+}
 
 //------------------------------------- Help Functions --------------------------------------------
 TraceUI* TraceUI::whoami(Fl_Menu_* o)	// from menu item back to UI itself
@@ -78,6 +94,11 @@ void TraceUI::cb_about(Fl_Menu_* o, void* v)
 	fl_message("RayTracer Project, FLTK version for CS 341 Spring 2002. Latest modifications by Jeff Maurer, jmaurer@cs.washington.edu");
 }
 
+void TraceUI::cb_depthSlides(Fl_Widget* o, void* v)
+{
+	((TraceUI*)(o->user_data()))->m_nDepth = int(((Fl_Slider *)o)->value());
+}
+
 void TraceUI::cb_sizeSlides(Fl_Widget* o, void* v)
 {
 	TraceUI* pUI=(TraceUI*)(o->user_data());
@@ -87,9 +108,29 @@ void TraceUI::cb_sizeSlides(Fl_Widget* o, void* v)
 	pUI->m_traceGlWindow->resizeWindow( pUI->m_nSize, height );
 }
 
-void TraceUI::cb_depthSlides(Fl_Widget* o, void* v)
+void TraceUI::cb_attenConstantSlides(Fl_Widget* o, void* v)
 {
-	((TraceUI*)(o->user_data()))->m_nDepth=int( ((Fl_Slider *)o)->value() ) ;
+	((TraceUI*)(o->user_data()))->m_nAttenConstant = double(((Fl_Slider *)o)->value());
+}
+
+void TraceUI::cb_attenLinearSlides(Fl_Widget* o, void* v)
+{
+	((TraceUI*)(o->user_data()))->m_nAttenLinear = double(((Fl_Slider *)o)->value());
+}
+
+void TraceUI::cb_attenQuadraticSlides(Fl_Widget* o, void* v)
+{
+	((TraceUI*)(o->user_data()))->m_nAttenQuadratic = double(((Fl_Slider *)o)->value());
+}
+
+void TraceUI::cb_intensityScaleSlides(Fl_Widget* o, void* v)
+{
+	((TraceUI*)(o->user_data()))->m_nIntensityScale = int(((Fl_Slider *)o)->value());
+}
+
+void TraceUI::cb_distanceScaleSlides(Fl_Widget* o, void* v)
+{
+	((TraceUI*)(o->user_data()))->m_nDistanceScale = double(((Fl_Slider *)o)->value());
 }
 
 void TraceUI::cb_render(Fl_Widget* o, void* v)
@@ -195,6 +236,32 @@ int TraceUI::getDepth()
 	return m_nDepth;
 }
 
+double TraceUI::getAttenConstant()
+{
+	return m_nAttenConstant;
+}
+
+
+double TraceUI::getAttenLinear()
+{
+	return m_nAttenLinear;
+}
+
+double TraceUI::getAttenQuadratic()
+{
+	return m_nAttenQuadratic;
+}
+
+int TraceUI::getIntensityScale()
+{
+	return m_nIntensityScale;
+}
+
+double TraceUI::getDisntanceScale()
+{
+	return m_nDistanceScale;
+}
+
 // menu definition
 Fl_Menu_Item TraceUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
@@ -214,7 +281,12 @@ TraceUI::TraceUI() {
 	// init.
 	m_nDepth = 0;
 	m_nSize = 150;
-	m_mainWindow = new Fl_Window(100, 40, 320, 100, "Ray <Not Loaded>");
+	m_nAttenConstant = 0.25;
+	m_nAttenLinear = 0.25;
+	m_nAttenQuadratic = 0.50;
+	m_nIntensityScale = 6;
+	m_nDistanceScale = 1.87;
+	m_mainWindow = new Fl_Window(100, 40, 370, 220, "Ray <Not Loaded>");
 		m_mainWindow->user_data((void*)(this));	// record self to be used by static callback functions
 		// install menu bar
 		m_menubar = new Fl_Menu_Bar(0, 0, 320, 25);
@@ -245,6 +317,71 @@ TraceUI::TraceUI() {
 		m_sizeSlider->value(m_nSize);
 		m_sizeSlider->align(FL_ALIGN_RIGHT);
 		m_sizeSlider->callback(cb_sizeSlides);
+
+		// install slider constant attenuation coefficient
+		m_attenConstantSlider = new Fl_Value_Slider(10, 80, 180, 20, "Attenuation, Constant");
+		m_attenConstantSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_attenConstantSlider->type(FL_HOR_NICE_SLIDER);
+		m_attenConstantSlider->labelfont(FL_COURIER);
+		m_attenConstantSlider->labelsize(12);
+		m_attenConstantSlider->minimum(0);
+		m_attenConstantSlider->maximum(1);
+		m_attenConstantSlider->step(0.01);
+		m_attenConstantSlider->value(m_nAttenConstant);
+		m_attenConstantSlider->align(FL_ALIGN_RIGHT);
+		m_attenConstantSlider->callback(cb_attenConstantSlides);
+
+		// install slider linear attenuation coefficient
+		m_attenLinearSlider = new Fl_Value_Slider(10, 105, 180, 20, "Attenuation, Linear");
+		m_attenLinearSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_attenLinearSlider->type(FL_HOR_NICE_SLIDER);
+		m_attenLinearSlider->labelfont(FL_COURIER);
+		m_attenLinearSlider->labelsize(12);
+		m_attenLinearSlider->minimum(0);
+		m_attenLinearSlider->maximum(1);
+		m_attenLinearSlider->step(0.01);
+		m_attenLinearSlider->value(m_nAttenLinear);
+		m_attenLinearSlider->align(FL_ALIGN_RIGHT);
+		m_attenLinearSlider->callback(cb_attenLinearSlides);
+
+		// install slider quadratic attenuation coefficient
+		m_attenQuadraticSlider = new Fl_Value_Slider(10, 130, 180, 20, "Attenuation, Quadratic");
+		m_attenQuadraticSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_attenQuadraticSlider->type(FL_HOR_NICE_SLIDER);
+		m_attenQuadraticSlider->labelfont(FL_COURIER);
+		m_attenQuadraticSlider->labelsize(12);
+		m_attenQuadraticSlider->minimum(0.00);
+		m_attenQuadraticSlider->maximum(1.00);
+		m_attenQuadraticSlider->step(0.01);
+		m_attenQuadraticSlider->value(m_nAttenQuadratic);
+		m_attenQuadraticSlider->align(FL_ALIGN_RIGHT);
+		m_attenQuadraticSlider->callback(cb_attenQuadraticSlides);
+
+		// install slider intensity scale
+		m_intensityScaleSlider = new Fl_Value_Slider(10, 155, 180, 20, "Intensity Scale");
+		m_intensityScaleSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_intensityScaleSlider->type(FL_HOR_NICE_SLIDER);
+		m_intensityScaleSlider->labelfont(FL_COURIER);
+		m_intensityScaleSlider->labelsize(12);
+		m_intensityScaleSlider->minimum(1);
+		m_intensityScaleSlider->maximum(10);
+		m_intensityScaleSlider->step(1);
+		m_intensityScaleSlider->value(m_nIntensityScale);
+		m_intensityScaleSlider->align(FL_ALIGN_RIGHT);
+		m_intensityScaleSlider->callback(cb_intensityScaleSlides);
+
+		// install slider distance scale
+		m_distanceScaleSlider = new Fl_Value_Slider(10, 180, 180, 20, "Distance Scale (Log10)");
+		m_distanceScaleSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_distanceScaleSlider->type(FL_HOR_NICE_SLIDER);
+		m_distanceScaleSlider->labelfont(FL_COURIER);
+		m_distanceScaleSlider->labelsize(12);
+		m_distanceScaleSlider->minimum(-0.99);
+		m_distanceScaleSlider->maximum(3.00);
+		m_distanceScaleSlider->step(0.01);
+		m_distanceScaleSlider->value(m_nDistanceScale);
+		m_distanceScaleSlider->align(FL_ALIGN_RIGHT);
+		m_distanceScaleSlider->callback(cb_distanceScaleSlides);
 
 		m_renderButton = new Fl_Button(240, 27, 70, 25, "&Render");
 		m_renderButton->user_data((void*)(this));

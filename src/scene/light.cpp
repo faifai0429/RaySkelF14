@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "light.h"
+#include "../ui/TraceUI.h"
 
 double DirectionalLight::distanceAttenuation( const vec3f& P ) const
 {
@@ -15,7 +16,7 @@ vec3f DirectionalLight::shadowAttenuation( const vec3f& P ) const
     // You should implement shadow-handling code here.
 
 	const double EPS = std::numeric_limits<double>::epsilon();
-	ray r(P + getDirection(P) * EPS, -getDirection(P));
+	ray r(P + (-getDirection(P) * EPS), -getDirection(P));
 	isect i;
 
 	if (scene->intersect(r, i)) {	
@@ -46,11 +47,12 @@ double PointLight::distanceAttenuation( const vec3f& P ) const
 	const double EPS = std::numeric_limits<double>::epsilon();
 	const double d2 = (position - P).length_squared();
 	const double d = sqrt(d2);
-	const double constant_attenuation_coeff = 0.25;
-	const double linear_attenuation_coeff = 0.003372407;
-	const double quadratic_attenuation_coeff = 0.000045492;
+	const double constant_attenuation_coeff = TraceUI::getInstance()->getAttenConstant();
+	const double linear_attenuation_coeff = TraceUI::getInstance()->getAttenLinear();
+	const double quadratic_attenuation_coeff = TraceUI::getInstance()->getAttenQuadratic();
 	const double divisor = constant_attenuation_coeff + linear_attenuation_coeff * d + quadratic_attenuation_coeff * d2;
-	return (divisor < EPS) ? 1.0 : std::max<double>(1.0, 1.0 / divisor);
+
+	return std::max<double>(1.0, 1.0 / (divisor < EPS ? EPS : divisor));
 }
 
 vec3f PointLight::getColor( const vec3f& P ) const
@@ -71,18 +73,22 @@ vec3f PointLight::shadowAttenuation(const vec3f& P) const
     // You should implement shadow-handling code here.
 	
 	const double EPS = std::numeric_limits<double>::epsilon();
-	ray r(P + getDirection(P) * EPS, -getDirection(P));			//push the isect point outward a bit
+	ray r(P + (-getDirection(P) * EPS), -getDirection(P));			//push the isect point outward a bit
 	isect i;
 
 	if (scene->intersect(r, i)) {
 		const double light_t = (position - P).length();
-		if (i.t < light_t) {					//intersection before light source
+		if (i.t>= 0 && i.t < light_t) {								//intersection before light source
 			return vec3f(0.0, 0.0, 0.0);
-		}
-		else {
+		} else {
 			return vec3f(1.0, 1.0, 1.0);
 		}
 	}
 
-	return vec3f(0.0, 0.0, 0.0);
+	return vec3f(1.0, 1.0, 1.0);
+}
+
+vec3f AmbientLight::getColor() const
+{
+	return color;
 }

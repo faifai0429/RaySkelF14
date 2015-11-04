@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
 		return 1;
 	} else {
 		// graphics mode
-		traceUI=new TraceUI();
+		traceUI = TraceUI::getInstance();
 		theRayTracer=new RayTracer();
 
 		traceUI->setRayTracer(theRayTracer);
@@ -203,6 +203,10 @@ int main(int argc, char **argv) {
 
 		traceUI->show();
 
-		return Fl::run();
+		int result = Fl::run();
+		
+		traceUI->destruct();
+
+		return result;
 	}
 }

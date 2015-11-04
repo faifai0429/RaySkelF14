@@ -8,6 +8,7 @@
 #include "scene/ray.h"
 #include "fileio/read.h"
 #include "fileio/parse.h"
+#include "ui/TraceUI.h"
 
 // Trace a top-level ray through normalized window coordinates (x,y)
 // through the projection plane, and out into the scene.  All we do is
@@ -53,7 +54,7 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		vec3f refl_dir = (u - 2.0 * (u.dot(i.N)) * i.N).normalize();	//reflection direction
 		vec3f isect_pos = r.at(i.t);									//intersection point
 		//new ray, push forward a bit to avoid intersect itself
-		ray refl_r(isect_pos + ((isect_pos - refl_dir).normalize() * EPS), refl_dir);		
+		ray refl_r(isect_pos + (refl_dir * EPS), refl_dir);
 		vec3f refl_contri = m.kr.cross(traceRay(scene, refl_r, thresh, depth + 1));
 		color = color + refl_contri;
 		
@@ -68,7 +69,7 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		}
 		color = color + refr_contri;
 
-		return color.clamp();								//clamp if the contribution > (1.0, 1.0, 1.0)
+		return color.clamp();
 	
 	} else {
 		// No intersection.  This ray travels to infinity, so we color
@@ -77,6 +78,7 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		return vec3f( 0.0, 0.0, 0.0 );
 	}
 }
+
 
 RayTracer::RayTracer()
 {

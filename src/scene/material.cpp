@@ -2,6 +2,16 @@
 #include "material.h"
 #include "light.h"
 
+vec3f getAmibientLightsIntensity(Scene *scene)
+{
+	vec3f intensity;
+	for (AmbientLight* ambientLight : *(scene->getAmbientLights()))
+	{
+		intensity += ambientLight->getColor();
+	}
+	return intensity;
+}
+
 // Apply the phong model to this point on the surface of the object, returning
 // the color of that point.
 vec3f Material::shade( Scene *scene, const ray& r, const isect& i ) const
@@ -23,15 +33,16 @@ vec3f Material::shade( Scene *scene, const ray& r, const isect& i ) const
 	vec3f refl_dir = (u - 2.0 * (u.dot(i.N)) * i.N).normalize();	//reflection direction
 	vec3f isect_pos = r.at(i.t);									//intersection point
 
-	vec3f color = ke /* + ambient light illumination */;
+	vec3f color = ke + ka.cross(getAmibientLightsIntensity(scene)).clamp();
 	vec3f intensity, atten, diffuse, specular;
-	for (list<Light*>::const_iterator light = scene->beginLights(); light != scene->endLights(); light++) {
-		intensity = (*light)->getColor(isect_pos);
-		atten = (*light)->distanceAttenuation(isect_pos) * (*light)->shadowAttenuation(isect_pos);
-		diffuse = kd.cross(intensity * i.N.dot((*light)->getDirection(isect_pos)));
+
+	for (Light* light : *(scene->getLights())) {
+		intensity = light->getColor(isect_pos);
+		atten = light->distanceAttenuation(isect_pos) * light->shadowAttenuation(isect_pos);
+		diffuse = kd.cross(intensity * std::max<double>(0, i.N.dot(light->getDirection(isect_pos))));
 		specular = ks.cross(intensity * pow(refl_dir.dot(-u), shininess * 128));
-		color = color + atten.cross(diffuse + specular);
+		color = color + atten.cross(diffuse.clamp() + specular.clamp());
 	}
 
-	return color;
+	return color.clamp();
 }
