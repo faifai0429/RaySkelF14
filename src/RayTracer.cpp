@@ -45,31 +45,28 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		if (color.length() < thresh.length()) {				//contribution is too low, terminate
 			//return vec3f(0.0, 0.0, 0.0);
 		}
-
-		const double EPS = std::numeric_limits<double>::epsilon();
-
+		
 		//reflection
-		vec3f u = r.getDirection();										//ray direction
-		vec3f n = i.N;													//surface normal
-		vec3f refl_dir = (u - 2.0 * (u.dot(i.N)) * i.N).normalize();	//reflection direction
-		vec3f isect_pos = r.at(i.t);									//intersection point
+		const vec3f& u = r.getDirection();										//ray direction
+		const vec3f& n = i.N;													//surface normal
+		const vec3f& refl_dir = (u - 2.0 * (u.dot(i.N)) * i.N).normalize();		//reflection direction
+		const vec3f& isect_pos = r.at(i.t);										//intersection point
 		//new ray, push forward a bit to avoid intersect itself
-		ray refl_r(isect_pos + (refl_dir * EPS), refl_dir);
-		vec3f refl_contri = m.kr.cross(traceRay(scene, refl_r, thresh, depth + 1));
-		color = color + refl_contri;
+		const ray refl_r(isect_pos + refl_dir * RAY_EPSILON, refl_dir);
+		const vec3f& refl_contri = prod(m.kr, traceRay(scene, refl_r, thresh, depth + 1));
+		color += refl_contri;
 		
 		//refraction
-		vec3f refr_contri(0.0, 0.0, 0.0);
-		float eta = 1.0f / m.index;							// refraction index ratio
-		float k = 1.0 - eta * eta * (1.0 - u.dot(n) * u.dot(n));
-		if (!(k < 0.0)) {									// k < 0.0 = internal reflection
-			vec3f refr_dir = eta * u - (eta * u.dot(n) + sqrtf(k)) * u;
-			ray refr_r(isect_pos, refr_dir);
-			refr_contri = m.kt.cross(traceRay(scene, refr_r, thresh, depth + 1));
+		double eta = 1.0f / m.index;								// refraction index ratio
+		double k = 1.0 - eta * eta * (1.0 - u.dot(n) * u.dot(n));
+		if (!(k < 0.0)) {											// k < 0.0 = internal reflection
+			const vec3f& refr_dir = eta * u - (eta * u.dot(n) + sqrt(k)) * u;
+			const ray refr_r(isect_pos + refr_dir *RAY_EPSILON, refr_dir);
+			const vec3f& refr_contri = prod(m.kt, traceRay(scene, refr_r, thresh, depth + 1));
+			color += color + refr_contri;
 		}
-		color = color + refr_contri;
-
-		return color.clamp();
+		
+		return color;
 	
 	} else {
 		// No intersection.  This ray travels to infinity, so we color

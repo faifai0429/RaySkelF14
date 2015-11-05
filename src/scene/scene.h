@@ -270,11 +270,11 @@ public:
 	bool intersect( const ray& r, isect& i ) const;
 	void initScene();
 
-	list<Light*>* getLights() {
-		return &lights;
+	const list<Light*>& getLights() {
+		return lights;
 	}
-	list<AmbientLight*>* getAmbientLights() {
-		return &ambientLights;
+	const list<AmbientLight*>& getAmbientLights() {
+		return ambientLights;
 	}
         
 	Camera *getCamera() { return &camera; }
