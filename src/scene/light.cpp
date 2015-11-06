@@ -78,7 +78,6 @@ vec3f PointLight::shadowAttenuation(const vec3f& P) const
 {
     // YOUR CODE HERE:
     // You should implement shadow-handling code here.
-	
 	//push the isect point outward a bit
 	vec3f result(1.0, 1.0, 1.0);
 	// push the point outwards a bit so that the ray won't hit itself

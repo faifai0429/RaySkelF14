@@ -18,6 +18,8 @@ vec3f RayTracer::trace( Scene *scene, double x, double y )
 {
     ray r( vec3f(0,0,0), vec3f(0,0,0) );
     scene->getCamera()->rayThrough( x,y,r );
+	const Material air;
+	material_stack.push_back(&air);
 	return traceRay( scene, r, vec3f(1.0,1.0,1.0), 0 ).clamp();
 }
 
@@ -43,10 +45,10 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		const Material& m = i.getMaterial();
 		vec3f result = m.shade(scene, r, i);
 
-		if (result.length() < thresh.length()) {				//contribution is too low, terminate
-			//return vec3f(0.0, 0.0, 0.0);
+		if (isLeavingObject(&m)) {
+			i.N = -i.N;								// Normal has to be flipped when leaving object
 		}
-		
+
 		//reflection
 		const vec3f& u = r.getDirection();										//ray direction
 		const vec3f& refl_dir = (u - 2.0 * u.dot(i.N) * i.N).normalize();		//reflection direction
@@ -57,13 +59,25 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		result = result + refl_contri;
 		
 		//refraction
-		double eta = 1.0f / m.index;								// refraction index ratio
-		double k = 1.0 - eta * eta * (1.0 - u.dot(i.N) * u.dot(i.N));
-		if (!(k < 0.0)) {											// k < 0.0 = internal reflection
-			const vec3f& refr_dir = eta * u - (eta * u.dot(i.N) + sqrt(k)) * u;
-			const ray refr_r(isect_pos + refr_dir * RAY_EPSILON, refr_dir);
-			const vec3f& refr_contri = prod(m.kt, traceRay(scene, refr_r, thresh, depth + 1));
-			result = result + refr_contri;
+		if (!m.kt.iszero()) {
+			double eta;
+			if (isLeavingObject(&m)) {
+				material_stack.pop_front();
+				eta = m.index / material_stack.front()->index; 			// refraction index ratio
+			}
+			else {
+				eta = material_stack.front()->index / m.index;			// refraction index ratio
+				material_stack.push_front(&m);
+			}
+
+			const double k = 1.0 - eta * eta * (1.0 - u.dot(i.N) * u.dot(i.N));
+
+			if (!(k < 0.0)) {							// k < 0.0 = internal reflection
+				const vec3f& refr_dir = eta * u - (eta * u.dot(i.N) + sqrt(k)) * u;
+				const ray refr_r(isect_pos + refr_dir * RAY_EPSILON, refr_dir);
+				const vec3f& refr_contri = prod(m.kt, traceRay(scene, refr_r, thresh, depth + 1));
+				result = result + refr_contri;
+			}
 		}
 
 		return result;
@@ -74,6 +88,10 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		// is just black.
 		return vec3f( 0.0, 0.0, 0.0 );
 	}
+}
+
+bool RayTracer::isLeavingObject(const Material* const material) {
+	return material == material_stack.front();
 }
 
 

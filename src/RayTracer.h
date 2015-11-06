@@ -22,6 +22,8 @@ public:
 	void traceLines( int start = 0, int stop = 10000000 );
 	void tracePixel( int i, int j );
 
+	bool isLeavingObject(const Material* const material);
+
 	bool loadScene( char* fn );
 
 	bool sceneLoaded();
@@ -31,6 +33,7 @@ private:
 	int buffer_width, buffer_height;
 	int bufferSize;
 	Scene *scene;
+	std::list<const Material*> material_stack;
 
 	bool m_bSceneLoaded;
 };
