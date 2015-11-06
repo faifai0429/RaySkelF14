@@ -58,12 +58,13 @@ double PointLight::distanceAttenuation( const vec3f& P ) const
 
 	const double divisor = TraceUI::getInstance()->getAttenConstant() + TraceUI::getInstance()->getAttenLinear() * d + TraceUI::getInstance()->getAttenQuadratic() * d2;
 
-	return (divisor == 0.0) ? 1.0 : 1.0 / std::max<double>(divisor, 1.0);
+	return (divisor == 0.0) ? 1.0 : 1.0 / std::max<double>(1.0, divisor);
 }
 
 vec3f PointLight::getColor( const vec3f& P ) const
 {
 	// Color doesn't depend on P 
+
 	return color;
 }
 

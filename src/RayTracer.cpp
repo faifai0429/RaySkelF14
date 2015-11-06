@@ -27,8 +27,9 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 	const vec3f& thresh, int depth )
 {
 	isect i;
+	const double maxDepth = TraceUI::getInstance()->getDepth();
 
-	if (depth <= 5 && scene->intersect(r, i)) {				//maxDepth is 5
+	if (depth <= maxDepth && scene->intersect(r, i)) {				//maxDepth is 5
 		// YOUR CODE HERE
 		// An intersection occured!  We've got work to do.  For now,
 		// this code gets the material for the surface that was intersected,
@@ -48,8 +49,7 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		
 		//reflection
 		const vec3f& u = r.getDirection();										//ray direction
-		const double dot_un = std::max<double>(0.0, u.dot(i.N));	
-		const vec3f& refl_dir = (u - 2.0 * dot_un * i.N).normalize();		//reflection direction
+		const vec3f& refl_dir = (u - 2.0 * u.dot(i.N) * i.N).normalize();		//reflection direction
 		const vec3f& isect_pos = r.at(i.t);										//intersection point
 		//new ray, push forward a bit to avoid intersect itself
 		const ray refl_r(isect_pos + refl_dir * RAY_EPSILON, refl_dir);
@@ -58,10 +58,10 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		
 		//refraction
 		double eta = 1.0f / m.index;								// refraction index ratio
-		double k = 1.0 - eta * eta * (1.0 - dot_un * dot_un);
+		double k = 1.0 - eta * eta * (1.0 - u.dot(i.N) * u.dot(i.N));
 		if (!(k < 0.0)) {											// k < 0.0 = internal reflection
-			const vec3f& refr_dir = eta * u - (eta * dot_un + sqrt(k)) * u;
-			const ray refr_r(isect_pos + refr_dir *RAY_EPSILON, refr_dir);
+			const vec3f& refr_dir = eta * u - (eta * u.dot(i.N) + sqrt(k)) * u;
+			const ray refr_r(isect_pos + refr_dir * RAY_EPSILON, refr_dir);
 			const vec3f& refr_contri = prod(m.kt, traceRay(scene, refr_r, thresh, depth + 1));
 			result = result + refr_contri;
 		}

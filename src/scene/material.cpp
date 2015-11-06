@@ -35,7 +35,7 @@ vec3f Material::shade( Scene *scene, const ray& r, const isect& i ) const
 	for (Light* light : scene->getLights()) {
 		const vec3f& u = light->getDirection(isect_pos);					//ray direction
 		const vec3f& shadowAtten = light->shadowAttenuation(isect_pos);
-		if (u.dot(i.N) > 0.0 && !shadowAtten.iszero()) {
+		if (!(u.dot(i.N) <= 0.0 || shadowAtten.iszero())) {
 			const vec3f& refl_dir = (u - 2.0 * u.dot(i.N) *i.N).normalize();	//reflection direction
 			const vec3f& intensity = light->getColor(isect_pos);
 			const vec3f& atten = light->distanceAttenuation(isect_pos) * shadowAtten;

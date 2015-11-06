@@ -281,9 +281,9 @@ TraceUI::TraceUI() {
 	// init.
 	m_nDepth = 0;
 	m_nSize = 150;
-	m_nAttenConstant = 0.25;
-	m_nAttenLinear = 0.25;
-	m_nAttenQuadratic = 0.50;
+	m_nAttenConstant = 0.00;
+	m_nAttenLinear = 0.00;
+	m_nAttenQuadratic = 0.00;
 	m_nIntensityScale = 6;
 	m_nDistanceScale = 1.87;
 	m_mainWindow = new Fl_Window(100, 40, 370, 220, "Ray <Not Loaded>");
