@@ -128,11 +128,6 @@ void TraceUI::cb_intensityScaleSlides(Fl_Widget* o, void* v)
 	((TraceUI*)(o->user_data()))->m_nIntensityScale = int(((Fl_Slider *)o)->value());
 }
 
-void TraceUI::cb_distanceScaleSlides(Fl_Widget* o, void* v)
-{
-	((TraceUI*)(o->user_data()))->m_nDistanceScale = double(((Fl_Slider *)o)->value());
-}
-
 void TraceUI::cb_render(Fl_Widget* o, void* v)
 {
 	char buffer[256];
@@ -257,11 +252,6 @@ int TraceUI::getIntensityScale()
 	return m_nIntensityScale;
 }
 
-double TraceUI::getDisntanceScale()
-{
-	return m_nDistanceScale;
-}
-
 // menu definition
 Fl_Menu_Item TraceUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
@@ -284,9 +274,8 @@ TraceUI::TraceUI() {
 	m_nAttenConstant = 0.00;
 	m_nAttenLinear = 0.00;
 	m_nAttenQuadratic = 0.00;
-	m_nIntensityScale = 6;
-	m_nDistanceScale = 1.87;
-	m_mainWindow = new Fl_Window(100, 40, 370, 220, "Ray <Not Loaded>");
+	m_nIntensityScale = 1;
+	m_mainWindow = new Fl_Window(100, 40, 370, 200, "Ray <Not Loaded>");
 		m_mainWindow->user_data((void*)(this));	// record self to be used by static callback functions
 		// install menu bar
 		m_menubar = new Fl_Menu_Bar(0, 0, 320, 25);
@@ -369,19 +358,6 @@ TraceUI::TraceUI() {
 		m_intensityScaleSlider->value(m_nIntensityScale);
 		m_intensityScaleSlider->align(FL_ALIGN_RIGHT);
 		m_intensityScaleSlider->callback(cb_intensityScaleSlides);
-
-		// install slider distance scale
-		m_distanceScaleSlider = new Fl_Value_Slider(10, 180, 180, 20, "Distance Scale (Log10)");
-		m_distanceScaleSlider->user_data((void*)(this));	// record self to be used by static callback functions
-		m_distanceScaleSlider->type(FL_HOR_NICE_SLIDER);
-		m_distanceScaleSlider->labelfont(FL_COURIER);
-		m_distanceScaleSlider->labelsize(12);
-		m_distanceScaleSlider->minimum(-0.99);
-		m_distanceScaleSlider->maximum(3.00);
-		m_distanceScaleSlider->step(0.01);
-		m_distanceScaleSlider->value(m_nDistanceScale);
-		m_distanceScaleSlider->align(FL_ALIGN_RIGHT);
-		m_distanceScaleSlider->callback(cb_distanceScaleSlides);
 
 		m_renderButton = new Fl_Button(240, 27, 70, 25, "&Render");
 		m_renderButton->user_data((void*)(this));

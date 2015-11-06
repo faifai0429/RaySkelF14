@@ -50,7 +50,6 @@ public:
 	double		getAttenLinear();
 	double		getAttenQuadratic();
 	int			getIntensityScale();
-	double		getDisntanceScale();
 
 	static		TraceUI* getInstance();
 	void		destruct();
@@ -65,7 +64,6 @@ private:
 	double		m_nAttenLinear;
 	double		m_nAttenQuadratic;
 	int			m_nIntensityScale;
-	double		m_nDistanceScale;
 
 // static class members
 	static Fl_Menu_Item menuitems[];
@@ -85,7 +83,6 @@ private:
 	static void cb_attenLinearSlides(Fl_Widget* o, void* v);
 	static void cb_attenQuadraticSlides(Fl_Widget* o, void* v);
 	static void cb_intensityScaleSlides(Fl_Widget* o, void* v);
-	static void cb_distanceScaleSlides(Fl_Widget* o, void* v);
 
 	static void cb_render(Fl_Widget* o, void* v);
 	static void cb_stop(Fl_Widget* o, void* v);

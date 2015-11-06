@@ -57,7 +57,7 @@ double PointLight::distanceAttenuation( const vec3f& P ) const
 	const double d = sqrt(d2);
 
 	const double divisor = TraceUI::getInstance()->getAttenConstant() + TraceUI::getInstance()->getAttenLinear() * d + TraceUI::getInstance()->getAttenQuadratic() * d2;
-
+	
 	return (divisor == 0.0) ? 1.0 : 1.0 / std::max<double>(1.0, divisor);
 }
 
