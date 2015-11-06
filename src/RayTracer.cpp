@@ -40,33 +40,33 @@ vec3f RayTracer::traceRay( Scene *scene, const ray& r,
 		// rays.
 
 		const Material& m = i.getMaterial();
-		vec3f color = m.shade(scene, r, i);
+		vec3f result = m.shade(scene, r, i);
 
-		if (color.length() < thresh.length()) {				//contribution is too low, terminate
+		if (result.length() < thresh.length()) {				//contribution is too low, terminate
 			//return vec3f(0.0, 0.0, 0.0);
 		}
 		
 		//reflection
 		const vec3f& u = r.getDirection();										//ray direction
-		const vec3f& n = i.N;													//surface normal
-		const vec3f& refl_dir = (u - 2.0 * (u.dot(i.N)) * i.N).normalize();		//reflection direction
+		const double dot_un = std::max<double>(0.0, u.dot(i.N));	
+		const vec3f& refl_dir = (u - 2.0 * dot_un * i.N).normalize();		//reflection direction
 		const vec3f& isect_pos = r.at(i.t);										//intersection point
 		//new ray, push forward a bit to avoid intersect itself
 		const ray refl_r(isect_pos + refl_dir * RAY_EPSILON, refl_dir);
 		const vec3f& refl_contri = prod(m.kr, traceRay(scene, refl_r, thresh, depth + 1));
-		color += refl_contri;
+		result = result + refl_contri;
 		
 		//refraction
 		double eta = 1.0f / m.index;								// refraction index ratio
-		double k = 1.0 - eta * eta * (1.0 - u.dot(n) * u.dot(n));
+		double k = 1.0 - eta * eta * (1.0 - dot_un * dot_un);
 		if (!(k < 0.0)) {											// k < 0.0 = internal reflection
-			const vec3f& refr_dir = eta * u - (eta * u.dot(n) + sqrt(k)) * u;
+			const vec3f& refr_dir = eta * u - (eta * dot_un + sqrt(k)) * u;
 			const ray refr_r(isect_pos + refr_dir *RAY_EPSILON, refr_dir);
 			const vec3f& refr_contri = prod(m.kt, traceRay(scene, refr_r, thresh, depth + 1));
-			color += color + refr_contri;
+			result = result + refr_contri;
 		}
-		
-		return color;
+
+		return result;
 	
 	} else {
 		// No intersection.  This ray travels to infinity, so we color
